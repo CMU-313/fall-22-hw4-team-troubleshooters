@@ -30,4 +30,7 @@ def configure_routes(app):
         })
         query = pd.get_dummies(query_df)
         prediction = clf.predict(query)
-        return jsonify(np.asscalar(prediction))
+        return jsonify({'prediction': np.ndarray.item(prediction)})
+       
+        # flask run in app directory
+        #input like http://127.0.0.1:5000/predict?age=0&absences=50&health=1
