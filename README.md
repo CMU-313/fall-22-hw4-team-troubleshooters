@@ -103,3 +103,19 @@ If you're not in the Pipenv shell, then execute the following command from the `
 ```terminal
 pipenv run pytest
 ```
+
+## Documentation
+
+The old model used three variables: age, health, and number of absences.
+
+For our new model, we used the six variables: the first period grade (G1), 
+                                              the second period grade (G2), 
+                                              the number of school absences (absences), 
+                                              the categorical weekly studytime (studytime), 
+                                              the categorical amount of freetime after school (freetime), 
+                                              and the number of past class failures up to four (failures).
+
+Our model returns a json with a variable 'prediction' that is either a 0 or 1 for whether or not the student is a good student.
+A student is a good student if the predicted grade of period 3 is greater than equal to 15.
+
+Our retrained model does better than the original model. We decided to use the same seed to split the data into the same test and train datasets. We trained our models on the train dataset and tested on the test dataset. Our new model has a 100% accuracy on the train dataset and a 97.48% on the test dataset. Our old model has a 88.77% accuracy on the train dataset and a 73.11% on the test dataset. Thus, our new model has better accuracy than the old model.
