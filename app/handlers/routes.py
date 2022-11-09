@@ -19,18 +19,47 @@ def configure_routes(app):
     @app.route('/predict')
     def predict():
         #use entries from the query string here but could also use json
-        age = request.args.get('age')
-        absences = request.args.get('absences')
-        health = request.args.get('health')
-        data = [[age], [health], [absences]]
+        if "G1" not in request.args:
+            return "Invalid Inputs Supplied", 400
+        if "G2" not in request.args:
+            return "Invalid Inputs Supplied", 400
+        if "studytime" not in request.args:
+            return "Invalid Inputs Supplied", 400
+        if "absences" not in request.args:
+            return "Invalid Inputs Supplied", 400
+        if "freetime" not in request.args:
+            return "Invalid Inputs Supplied", 400
+        if "failures" not in request.args:
+            return "Invalid Inputs Supplied", 400
+        g1 = request.args.get('G1', type=int, default=-1)
+        g2 = request.args.get('G2', type=int, default=-1)
+        studytime = request.args.get('studytime', type=int, default=-1)
+        absences = request.args.get('absences', type=int, default=-1)
+        freetime = request.args.get('freetime', type=int, default=-1)
+        failures = request.args.get('failures', type=int, default=-1)
+
+        if g1 < 0  or g1 > 20:
+            return "Out of Range Inputs Supplied", 405
+        if g2 < 0  or g2 > 20:
+            return "Out of Range Inputs Supplied", 405
+        if studytime < 1  or studytime > 4:
+            return "Out of Range Inputs Supplied", 405
+        if absences < 0  or absences > 93:
+            return "Out of Range Inputs Supplied", 405
+        if freetime < 1  or freetime > 5:
+            return "Out of Range Inputs Supplied", 405
+        if failures < 0  or failures > 4:
+            return "Out of Range Inputs Supplied", 405
+
+        data = [[g1], [g2], [studytime],[absences], [freetime], [failures]]
         query_df = pd.DataFrame({
-            'age': pd.Series(age),
-            'health': pd.Series(health),
-            'absences': pd.Series(absences)
+            'G1' : pd.Series(g1),
+            'G2' : pd.Series(g2),
+            'studytime' : pd.Series(studytime),
+            'absences': pd.Series(absences),
+            'freetime' : pd.Series(freetime),
+            'failures': pd.Series(failures)
         })
         query = pd.get_dummies(query_df)
         prediction = clf.predict(query)
         return jsonify({'prediction': np.ndarray.item(prediction)})
-       
-        # flask run in app directory
-        #input like http://127.0.0.1:5000/predict?age=0&absences=50&health=1
